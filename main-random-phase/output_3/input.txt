@@ -1,0 +1,91 @@
+#########################		Defining the Universe of the Simulation		########################################################
+
+Simulation_Ensemble   'NVT'		# (string) 		2 possibilities: NVT or NPT ensemble. 							
+Oriented_Particles	'false'		# (boolean)  		If true, the particle has orientation. 
+Potential_Tabulated	'false'		# (boolean)		If true, the potential must be supplied by in input file, if false, the potential is analytic.
+Potential_PATH		'/home/oscar/Escritorio/Anfifilicas/PES_BUENA/PES_interpolada.txt'	# (string)	Path for reading the potential file, between simple quotes ''.
+Potential_Function	'LJ'		# (string)		Possible potential interactions: 'LJ' for Lennard Jones, 'Morse' for Morse interaction, 'HD' for hard discs, 'GB' for Gay Berne elliptical potential (with oriented particles), 'AR' for algebraic repulsion, 'ARA' for algebraic repulsion and atraction.
+
+
+
+#################################################################################################################################################
+
+#########################	Defining the Potential interaction and the System Parameters		#########################################
+
+Box_x			40.0		# (double)		Length of the simulation box in the x axis. Overrided if initial positions are read from file
+Box_y			40.0		# (double)		Length of the simulation box in the y axis. Overrided if initial positions are read from file
+Particles_Num		500		# (long long int)  	Number of particles of each specie. This value is overrided if the particles are placed in a Bravais lattice or initial positions are read from file  
+
+Temperature_Sys  	420.0		# (double)		Temperature in Kelvin.
+Target_Pressure	0.03		# (double) 		Surface pressure targeted in the NPT ensemble in N/m
+
+Dipole_Moment		1.5		# (double)		Value of the dipolar moment for each specie
+Potential_Sigma	3.5		# (double)		Characteristic length for the potential energy calculation (if it is not obtained from a table) for each specie
+Potential_Epsilon	0.01		# (double)		Characteristic energy for the potential energy calculation (if it is not obtained from a table) for each specie
+Potential_Width	5		# (double)		Parameter that controls the well width of the Morse potential for each specie
+Rigid_Elements		2		# (long long int)	Number of elements contained if the particles have more than one component
+Epsilon_EndEnd		0.08		# (double)		Value of the well depth in the end to end configuration for the Gay-Berne potential for each specie
+Epsilon_SidSid		0.10		# (double)		Value of the well depth in the side to side configuration for the Gay-Berne potential for each specie
+Sigma_Par		4.9		# (double)		Value of the mayor axis of the ellipse (must be greater or equal than the minor axis value) for the Gay-Berne potential for each specie
+Sigma_Perp		3.3		# (double)		Value of the minor axis of the ellipse for the Gay-Berne potential for each specie
+Mu_Ellipse		2.0		# (double)		Value of the exponent mu for the epsilon construction of Gay-Berne potential for each specie
+Nu_Ellipse		1.0		# (double)		Value of the exponent nu for the epsilon construction of Gay-Berne potential for each specie
+
+Rep_Exponent		12.0			# (double)		Vale of the exponent of the algebraic repulsive potential
+Atr_Exponent		6.0			# (double)		Vale of the exponent of the algebraic atractive potential (must be smaller than the repulsive)
+
+
+
+#################################################################################################################################################
+
+#########################################	Sampling Variables		#################################################################
+
+
+
+
+
+#################################################################################################################################################
+
+#########################################	Simulation Variables		#################################################################
+
+
+Num_Steps		100		# (long long int)	Number of trial movements performed in the simulation (in millions)
+Num_Processors		2		# (int)			Number of processors employed in the simulation
+Potential_Analytic	'true'		# (boolean)		If true, the potential is calculated analytically for each interaction, if false, it is stored in memory
+Potential_Interpolat	'false'	# (boolean)		If true, the interaction energy is calculated with trilinear interpolation, if false, it is taken from the nearest point in the table
+Potential_Out		'false'	# (boolean)		If true, the potential is stored in an output file, if false, it is not. 
+System_Units		'Internal'	# (string)		'Internal' for LJ, Morse or HS internal units, 'Nano' for eV, Angstrom
+
+Radial_Disp		0.1		# (double)		Amplitude of the longitudinal displacements
+Angular_Disp		10.0		# (double)		Amplitude of the angular displacements in degrees.
+Rdf_Precision		0.03		# (double)		Width of the rdf grid in length units
+Cutoff_Radius  	10.1		# (double)		Maximum distance for which energies are computed
+
+
+
+
+
+#################################################################################################################################################
+
+#########################################	Initial Positions		#################################################################
+
+Initial_File		'true'		# (boolean)		If true, the initial positions are read from a file
+Initial_Path		'/home/oscar/Escritorio/curro/random-phase/random-phase/main-random-phase/output/final_coordinates.txt'	# (string)	Path to the input file for the initial positions
+
+Initial_Lattice		'false'		# (boolean)		If true, initial positions are placed in a lattice. If not they are placed randomly. It is overrided if initial positions come from a file
+
+Lattice_a		4.0		# (double)		Value of the lattice constant "a" (along the X axis)
+Lattice_b		4.0		# (double)		Value of the lattice constant "b" (deprecated
+Lattice_alpha		60.0		# (double)		Value of the angle between "a" and "b" lattice vectors in degrees (from 0º to 180º)
+Lattice_Elements	2.0		# (int)			Number of particles present in each unit cell of the lattice
+
+
+					# Block containing the specie index and coordinates of the different atoms that are in each unit cell
+					# The first and second columns are the "x" and "y" fractional coordinates. A third column must be suplied if the particles have orientation, describing their orientation respect to the X axis in degrees. Fractional coordinates in the range [0,1)
+%Begin_Lattice_Coordinates		
+0.0 0.0		
+0.5 0.5	
+%End_Lattice_Coordinates
+
+
+#################################################################################################################################################

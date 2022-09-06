@@ -1,0 +1,135 @@
+Ensemble_MC	2		# 1 for NVT, 2 for NPT, 3 for Grand-Cannonical
+System_Dimension	2	# 2 for 2D systems and 3 for 3D systems
+Particles_Num   1200		# Number of particles in the simulation (maximum 5000)
+Rotating_Particle	1	# 1 for particles with orientation, 0 if not.
+Potential_Table	1		# 1 for reading potential energy from file, 0 if not. 
+				# If rotation of the molecule is not allowed, two columns with distance
+				# and energy must be supplied. If rotation is allowed, four columns withdistance, polar angle,
+				# angle between orientations and energy are supplied. The cutoff radius must coincide with the end of radial dependence
+Potential_PATH	'/home/oscar/Escritorio/Anfifilicas/PES_BUENA/PES_interpolada.txt'   # Path for reading the potential file, between simple quotes ''.
+PotentialEnergy 1		# 1 for LJ potential, 2 for Morse potential, 3 for hard spheres
+Electric_Dipole	0		# 1 for calculations with electric dipole moment, 0 if not
+Solvation_eff	0		# 0 if there are no solvation effects included, 1 if there are
+Rigid_mol	0		# 1 for particles composed of several elements, which have a rigid form. 0 if not. Particles must have orientation
+Elipse_Sigma	1		# 0 for conventional Lennard Jones potential, 1 for eliptic simetry in the potential
+
+
+Dipole_Moment	1.2		# Value of the dipole moment
+Solvation_amp	0.1		# Amplitude of the fluctuations in the energy induced by the solvation effects (in the units specified for the energy)
+Sigma_lj     4.0		# For the LJ potential, the distance where potential is 0, for the Morse potential, the bond distance
+Epsilon_lj     0.1		# For the LJ and Morse potential, the well depth.
+WellWidth 	5		# The parameter that controls the width in the Morse potential (the bigger it is, more narrow poten.)
+N_elements	2		# Number of elements contained in the rigid molecule (if present)
+Epsilon_EndEnd	0.06		# Value of the well depth in the end to end configuration
+Epsilon_SidSid	0.10		# Value of the well depth in the side to side configuration
+Sigma_Par	4.9		# Value of the mayor axis of the elipse (must be greater or equal than the minor axis value)
+Sigma_Perp	3.3		# Value of the minor axis of the elipse
+Mu_Elipse	2.0		# Value of the exponent mu for the epsilon construction of Gay-Berne potential
+Nu_Elipse	1.0		# Value of the exponent nu for the epsilon construction of Gay-Berne potential
+
+
+
+
+
+Steps    100			# Millions of trial movements per simulation
+Procesors  2			# Number of procesor used in the simulation (Max. 29)
+
+Target_Pressure	0.03		# Surface pressure targeted for the NPT ensemble in N/m
+Temperature_sys	100		# Temperature
+
+Potential_Analytic	0	# 1 if the potential is calculated analytically for each interaction, 0 if it is stored in a table
+Potential_Inter	1		# 0 if the interaction energy is taken from the nearest point in the table, 1 for trilinear interpolation
+Potential_out	0		# 1 if the potential is stored in an output file, 0 if not
+LJ_units	0		# Potential expressed in Lennard Jones internal units for value 1, 0 if not.
+
+
+Rejilla_Ang	10.0		# Amplitude of the angular movements in degrees
+SpatialGrid  0.05		# Maximum displacement for T=1K. This displacement grows as T^(1/2)
+Rdf_Precision		0.03		# (double)		Width of the rdf grid in length units
+CuttofRadius  10.1		# Distance within the energies are estimated
+
+		###################################
+
+		###### Parameters that define the particle interaction	#######
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		##################################
+
+		##### Initial positions	##########
+
+Condensed_ini	2  		# 0 for condensed, 1 for disperse initial system, 2 for cell ordering
+Restart_ini	0		# 1 if initial configuration is provided in the initial.txt file, 0 if not
+Random_Orientation	0	# 1 for initial random orientation of the particles, 0 if determined by next parameter
+Init_Orientation	45	# Orientation angle for the initial positions in degrees.
+Delta_Fi_Init	90		# Angle between consecutive particles if the system is ordered
+Init_Cell_Ratio	1.732050808	# Ratio between "a" and "b" unit cell vectors for inital positions when ordered. 1.732050808 is sqrt(3)
+Disorder_Seed	0		# 1 for creating a disordered zone in the center of the system, 0 if not.(only for ordered systems)
+Noise_Amplitude	1.0		# Amplitude of the displacement for the disordered particles. (definition of disorder_seed)
+
+		###################################
+
+		#####	Grids and Calculation Variables	###########
+
+
+
+
+VerletRadius   15.5		# Radius for computing the Verlet list
+Rneighbor   6.5			# Distance within the neigbors are taken into account
+Nneighbor	3		# Number of neighbors for which an atom is considered in condensed state
+NPotential	612		# Grid of the potential energy table
+Rdensity	40.0		# Radius used for the density distribution centered in each particle
+
+
+
+Volume_Change	0.001		# Parameter that controls the maximum volume change in a step (Recomended less than 0.1)
+Theta_Grid	288		# Number of divisions for the polar coordinate
+Delta_Fi_Grid	288		# Number of divisions for the orientation coordinate
+
+Burger_Lim_Rat	0.1		# Maximum value of Burgers vector of disclination pairs, in units of sigma.
+Energy_Grid_Precision	0.01	# Amplitude of the energy grid for the energy map in sigmas.
+Voronoi_Construction	1	# 1 if the Nearest Neighbors are computed with the voronoi construction, 0 if not. The dynamic changes format.
+
+		#####	Rigid Molecules		#################
+
+
+
+Oriented_elements	1	# 1 if the elements of the molecule have orientation, 0 if not
+
+Begin_Rigid_Position
+0.0	0.0	335.0
+0.0	0.0	25.0
+		
+End_Rigid_Position		# Block that defines the position and orientation of the elements relative to the molecule's position and orientation.
+				# The position is given in spherical (3D) or polar coordinates (2D): Radius   Polar/Azimuth Angle   Colatitude Angle 
+				# 2D oriented Format:	Radius    Polar Angle (position)    Orientation Angle   
+
+		#######################################
+
+		#####	Sampling options	#################
+
+Snapshot_freq	1		# Number of measurements realized between two consecutive snapshots.
+Nsampling  100			# Number of measurements during the simulation
+Clusters	0		# 1 if the aggregate size is computed, 0 if not
+Therm_ratio	0.7		# Ratio between thermalization and total steps. 0 without thermalization, 0.9 long thermalization.
+Energy_Map	0		# 1 if potential energy map is calculated, 0 if not.
+Defect_Calculation	1	# 1 for defect analisys is performed, 0 if not.
+
+		#######################################
+
+	
