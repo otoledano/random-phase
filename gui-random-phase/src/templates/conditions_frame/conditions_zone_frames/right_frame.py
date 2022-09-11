@@ -1,35 +1,35 @@
 import tkinter as tk
 
-from src.api.dto.dummy_input import DummyInput
-from src.service.service import Service
+from src.api.dto.dummy_condition import DummyConditions
 
 
-class NewInputFrame(tk.Frame):
-    """Frame to create new input files, save them in unfinished states or create them as templates"""
+class RightFrame(tk.Frame):
+    """Central frame where the info from the input is displayed"""
 
-    parent_element = None
+    def __init__(self, parent, service):
+        super().__init__(parent)
 
-    entry_input_name = None
-    label_input_name = None
+        # Visual variables
+        self.entry_input_name = None
+        self.label_input_name = None
+        self.label_text_field = None
+        self.entry_text_field = None
+        self.button_test = None
 
-    label_text_field = None
-    entry_text_field = None
-
-    button_test = None
-
-    def __init__(self, parent_element):
-        super().__init__()
+        # Non visual variables
+        self.parent = parent
+        self.service = service
         self.var_input_name = tk.StringVar()
         self.var_text_field = tk.StringVar()
-        self.parent_element = parent_element
+
+        # Initialize
         self.paint()
 
-    def paint(self):
-        self.grid(column=0, row=0, sticky="nsew")
-        self.parent_element.grid_rowconfigure(0, weight=1)
-        self.parent_element.grid_columnconfigure(0, weight=1)
+        # Layout
+        self.layout()
 
-        # Row One
+    def paint(self) -> None:
+        # First One
         self.label_input_name = tk.Label(self)
         self.label_input_name.config(text="Input Name")
         self.label_input_name.grid(row=0, column=0, padx=(30, 0), pady=(10, 3))
@@ -52,11 +52,12 @@ class NewInputFrame(tk.Frame):
         self.button_test.config(text="Test Button", command=self.send_test_data)
         self.button_test.grid(row=4, column=0, padx=(30, 0), pady=(30, 0), ipadx=10, ipady=0, sticky="ew")
 
-    def send_test_data(self):
-        service = Service()
-        dummy_input = DummyInput()
+    def layout(self):
+        pass
 
+    def send_test_data(self):
+        dummy_input = DummyConditions()
         dummy_input.input_name = self.var_input_name.get()
         dummy_input.dummy_text = self.var_text_field.get()
+        self.service.create_input_and_run(dummy_input)
 
-        service.create_input_and_run(dummy_input)

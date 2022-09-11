@@ -1,4 +1,5 @@
-from src.template import root
+
+from src.templates.root import Root
 
 
 class Main:
@@ -6,7 +7,7 @@ class Main:
         self.main()
 
     def main(self):
-        root.Root()
+        Root()
 
 
 if __name__ == "__main__":

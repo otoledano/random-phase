@@ -14,4 +14,4 @@ CALC_ICO_PATH: str = join(RESOURCES_PATH, "calc.ico")
 
 # Path to io folder
 IO_PATH: str = join(PROJECT_PATH, "io")
-INPUT_PATH: str = join(IO_PATH, "input")
+CONDITIONS_PATH: str = join(IO_PATH, "conditions")
