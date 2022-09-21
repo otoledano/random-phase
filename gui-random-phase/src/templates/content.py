@@ -1,9 +1,10 @@
 from tkinter import ttk
-from tkinter.ttk import Notebook
 
+from src.api.constants.constants import Cts
 from src.service.service import Service
 from src.templates.conditions_frame.conditions_frame import ConditionsFrame
 from src.templates.results_frame.results_frame import ResultsFrame
+from src.templates.visualization_frame.visualization_frame import VisualizationFrame
 
 
 class Content(ttk.Frame):
@@ -15,8 +16,8 @@ class Content(ttk.Frame):
         super().__init__(parent)
 
         # Visual variables
-        self.notebook = None
         self.conditions_frame = None
+        self.visualization_frame = None
         self.results_frame = None
         self.status_bar = None
 
@@ -31,13 +32,18 @@ class Content(ttk.Frame):
         self.layout()
 
     def paint(self) -> None:
-        self.notebook = Notebook(self)
-        self.conditions_frame = ConditionsFrame(self.notebook, self.service)
-        self.results_frame = ResultsFrame(self.notebook, self.service)
-        self.notebook.add(self.conditions_frame, text="Conditions")
-        self.notebook.add(self.results_frame, text="Results")
-        self.notebook.grid(column=0, row=0, sticky="nsew")
+
+        self.conditions_frame = ConditionsFrame(self, self.service)
+        self.conditions_frame.config(borderwidth=1, relief="groove")
+        self.conditions_frame.grid(**Cts.GRID_0_0, **Cts.STICKY_X)
+
+        self.visualization_frame = VisualizationFrame(self, self.service)
+        self.visualization_frame.grid(**Cts.GRID_0_1, **Cts.STICKY_ALL)
+
+        self.results_frame = ResultsFrame(self, self.service)
+        self.results_frame.grid(Cts.GRID_0_2, **Cts.STICKY_ALL)
 
     def layout(self):
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=1)
+
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)

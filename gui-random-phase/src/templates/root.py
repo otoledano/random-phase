@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import ttk, FALSE
 
 from src.api.utils.paths import CALC_ICO_PATH
 from .content import Content
@@ -13,6 +14,12 @@ class Root(tkinter.Tk):
 
         # Visual variables
         self.content = None
+        self.menu = None
+
+        # Non Visual variables
+        self.window_width = None
+        self.window_length = None
+        self.menu = None
 
         # Initialize
         self.paint()
@@ -27,12 +34,14 @@ class Root(tkinter.Tk):
         # Define window
         self.title("Random Phase GUI Application")
         self.iconbitmap(CALC_ICO_PATH)
-        self.geometry('400x400')
+
+        self.geometry('1200x800')
+        self.state('zoomed')
         self.resizable(True, True)
 
-        # Creates the content frame and set which is his position and how it grows
+        # Creates the content frame and set which is his position
         self.content: Content = Content(self)
-        self.content.grid(column=0, row=0, sticky="nsew")
+        self.content.grid(column=0, row=1, sticky="nsew")
 
     def layout(self):
         self.rowconfigure(0, weight=1)

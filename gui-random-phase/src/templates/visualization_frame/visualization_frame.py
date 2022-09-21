@@ -2,8 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class ResultsFrame(tk.Frame):
-    """Results frame"""
+class VisualizationFrame(tk.Frame):
+    """Visualization frame"""
 
     def __init__(self, parent, service):
         super().__init__(parent)

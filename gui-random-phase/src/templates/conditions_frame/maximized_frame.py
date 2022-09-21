@@ -1,9 +1,9 @@
-import tkinter as tk
 from tkinter import ttk
+import tkinter as tk
 
 
-class ResultsFrame(tk.Frame):
-    """Results frame"""
+class MaximizedFrame(ttk.Frame):
+    """FILL"""
 
     def __init__(self, parent, service):
         super().__init__(parent)
@@ -69,11 +69,15 @@ class ResultsFrame(tk.Frame):
         self.labelframe_options.grid(row=0, column=0, sticky="EW", **self.pady10)
 
         self.radiobutton_new_conditions = ttk.Radiobutton(self.labelframe_options)
-        self.radiobutton_new_conditions.config(text="New simulation conditions", variable=self.global_action_var, value=self.NEW_CONDITIONS, command=self.selected_radiobutton_new_conditions)
+        self.radiobutton_new_conditions.config(text="New simulation conditions", variable=self.global_action_var,
+                                               value=self.NEW_CONDITIONS,
+                                               command=self.selected_radiobutton_new_conditions)
         self.radiobutton_new_conditions.grid(row=0, column=0, sticky="W", **self.pady10)
 
         self.radiobutton_load_conditions = ttk.Radiobutton(self.labelframe_options)
-        self.radiobutton_load_conditions.config(text="Load existing simulation conditions", variable=self.global_action_var, value=self.LOAD_CONDITIONS, command=self.selected_radiobutton_load_conditions)
+        self.radiobutton_load_conditions.config(text="Load existing simulation conditions",
+                                                variable=self.global_action_var, value=self.LOAD_CONDITIONS,
+                                                command=self.selected_radiobutton_load_conditions)
         self.radiobutton_load_conditions.grid(row=1, column=0, sticky="W", **self.pady10)
 
         #   ->State of simulation to load
@@ -82,30 +86,42 @@ class ResultsFrame(tk.Frame):
         self.labelframe_conditions_state.grid(row=2, column=0, sticky="W", **self.pady10)
 
         self.checkbutton_completed_results = ttk.Checkbutton(self.labelframe_conditions_state)
-        self.checkbutton_completed_results.config(text="Completed results", variable=self.completed_results_var, onvalue=self.COMPLETED_RESULTS, offvalue="", command=self.upload_search_by_state)
+        self.checkbutton_completed_results.config(text="Completed results", variable=self.completed_results_var,
+                                                  onvalue=self.COMPLETED_RESULTS, offvalue="",
+                                                  command=self.upload_search_by_state)
         self.checkbutton_completed_results.grid(row=0, column=0, sticky="W", **self.pady10)
 
         self.checkbutton_in_progress_results = ttk.Checkbutton(self.labelframe_conditions_state)
-        self.checkbutton_in_progress_results.config(text="In progress results", variable=self.in_progress_results_var, onvalue=self.IN_PROGRESS_RESULTS, offvalue="", command=self.upload_search_by_state)
+        self.checkbutton_in_progress_results.config(text="In progress results", variable=self.in_progress_results_var,
+                                                    onvalue=self.IN_PROGRESS_RESULTS, offvalue="",
+                                                    command=self.upload_search_by_state)
         self.checkbutton_in_progress_results.grid(row=1, column=0, sticky="W", **self.pady10)
 
         self.checkbutton_completed_conditions = ttk.Checkbutton(self.labelframe_conditions_state)
-        self.checkbutton_completed_conditions.config(text="Completed conditions", variable=self.completed_conditions_var, onvalue=self.COMPLETED_CONDITIONS, offvalue="", command=self.upload_search_by_state)
+        self.checkbutton_completed_conditions.config(text="Completed conditions",
+                                                     variable=self.completed_conditions_var,
+                                                     onvalue=self.COMPLETED_CONDITIONS, offvalue="",
+                                                     command=self.upload_search_by_state)
         self.checkbutton_completed_conditions.grid(row=2, column=0, sticky="W", **self.pady10)
 
         self.checkbutton_incomplete_conditions = ttk.Checkbutton(self.labelframe_conditions_state)
-        self.checkbutton_incomplete_conditions.config(text="Incomplete conditions", variable=self.incomplete_conditions_var, onvalue=self.INCOMPLETE_CONDITIONS, offvalue="", command=self.upload_search_by_state)
+        self.checkbutton_incomplete_conditions.config(text="Incomplete conditions",
+                                                      variable=self.incomplete_conditions_var,
+                                                      onvalue=self.INCOMPLETE_CONDITIONS, offvalue="",
+                                                      command=self.upload_search_by_state)
         self.checkbutton_incomplete_conditions.grid(row=3, column=0, sticky="W", **self.pady10)
         # We deactivate these buttons for the initialization where the selected radiobutton is the new conditions one
         self.deactivate_check_buttons()
 
         # <-(Options)
         self.radiobutton_templates = ttk.Radiobutton(self.labelframe_options)
-        self.radiobutton_templates.config(text="Initial conditions templates", variable=self.global_action_var, value=self.LOAD_TEMPLATE, command=self.selected_radiobutton_load_templates)
+        self.radiobutton_templates.config(text="Initial conditions templates", variable=self.global_action_var,
+                                          value=self.LOAD_TEMPLATE, command=self.selected_radiobutton_load_templates)
         self.radiobutton_templates.grid(row=3, column=0, sticky="W", **self.pady10)
 
         self.radiobutton_examples = ttk.Radiobutton(self.labelframe_options)
-        self.radiobutton_examples.config(text="Illustrative simulations", variable=self.global_action_var, value=self.LOAD_EXAMPLE, command=self.selected_radiobutton_load_examples)
+        self.radiobutton_examples.config(text="Illustrative simulations", variable=self.global_action_var,
+                                         value=self.LOAD_EXAMPLE, command=self.selected_radiobutton_load_examples)
         self.radiobutton_examples.grid(row=4, column=0, sticky="W", **self.pady10)
 
         # File list
@@ -138,7 +154,8 @@ class ResultsFrame(tk.Frame):
         self.rowconfigure(1, weight=1)
         self.rowconfigure(2, weight=1)
 
-    # Select radio button and change action mode
+        # Select radio button and change action mode
+
     def selected_radiobutton_new_conditions(self):
         self.deactivate_check_buttons()
         self.button_first_action.config(text="Create blank conditions")
@@ -155,7 +172,8 @@ class ResultsFrame(tk.Frame):
         self.deactivate_check_buttons()
         self.button_first_action.config(text="Load selected example")
 
-    # Other functions
+        # Other functions
+
     def deactivate_check_buttons(self):
         self.checkbutton_completed_results.config(state="disabled")
         self.checkbutton_in_progress_results.config(state="disabled")
