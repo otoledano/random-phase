@@ -1,12 +1,12 @@
-import tkinter as tk
 from tkinter import ttk
+import tkinter as tk
 
 
-class LeftFrame(tk.Frame):
-    """Left frame"""
+class ConditionsStandardContent(ttk.Frame):
+    """FILL"""
 
     def __init__(self, parent, service):
-        super().__init__()
+        super().__init__(parent)
 
         # Visual variables
         self.labelframe_options = None
@@ -154,7 +154,8 @@ class LeftFrame(tk.Frame):
         self.rowconfigure(1, weight=1)
         self.rowconfigure(2, weight=1)
 
-    # Select radio button and change action mode
+        # Select radio button and change action mode
+
     def selected_radiobutton_new_conditions(self):
         self.deactivate_check_buttons()
         self.button_first_action.config(text="Create blank conditions")
@@ -171,7 +172,8 @@ class LeftFrame(tk.Frame):
         self.deactivate_check_buttons()
         self.button_first_action.config(text="Load selected example")
 
-    # Other functions
+        # Other functions
+
     def deactivate_check_buttons(self):
         self.checkbutton_completed_results.config(state="disabled")
         self.checkbutton_in_progress_results.config(state="disabled")

@@ -2,7 +2,7 @@ from tkinter import ttk
 import tkinter as tk
 
 
-class MaximizedFrame(ttk.Frame):
+class ResultsStandardContent(ttk.Frame):
     """FILL"""
 
     def __init__(self, parent, service):

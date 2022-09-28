@@ -28,3 +28,9 @@ class Cts:
     MAXIMIZED_SIZE = "Maximized_size"
     MINIMIZED_SIZE = "Minimized_size"
     STANDARD_SIZE = "Standard_size"
+    BIG_SIZE = "Big_size"
+
+    # Panel names
+    CONDITIONS_FRAME = "Conditions_frame"
+    VISUALIZATION_FRAME = "Visualization_frame"
+    RESULTS_FRAME = "Results_frame"
