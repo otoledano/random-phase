@@ -22,7 +22,7 @@ class ConditionsFrame(ttk.Frame):
         self.panel_minimized_content = None
 
         # Non visual variables
-        self.parent: Content = parent
+        self.parent = parent
         self.service = service
         self.size = Cts.STANDARD_SIZE
         self.name = Cts.CONDITIONS_FRAME
