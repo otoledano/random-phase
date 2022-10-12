@@ -1,8 +1,7 @@
 import tkinter
-from tkinter import ttk, FALSE
 
-from src.api.utils.paths import CALC_ICO_PATH
 from .content import Content
+from ..api.utils.paths import PathTo
 
 
 class Root(tkinter.Tk):
@@ -33,7 +32,7 @@ class Root(tkinter.Tk):
     def paint(self):
         # Define window
         self.title("Random Phase GUI Application")
-        self.iconbitmap(CALC_ICO_PATH)
+        self.iconbitmap(PathTo.CALC_ICO_IMAGE)
 
         self.geometry('1200x800')
         self.state('zoomed')
@@ -41,7 +40,7 @@ class Root(tkinter.Tk):
 
         # Creates the content frame and set which is his position
         self.content: Content = Content(self)
-        self.content.grid(column=0, row=1, sticky="nsew")
+        self.content.grid(column=0, row=0, sticky="nsew")
 
     def layout(self):
         self.rowconfigure(0, weight=1)

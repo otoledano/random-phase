@@ -4,6 +4,8 @@ from tkinter import ttk
 from src.api.constants.constants import Cts
 from src.templates.conditions_frame.conditions_max_content import ConditionsMaxContent
 from src.templates.conditions_frame.conditions_standard_content import ConditionsStandardContent
+from src.templates.visualization_frame.visualization_max_content import VisualizationMaxContent
+from src.templates.visualization_frame.visualization_standard_content import VisualizationStandardContent
 
 
 class VisualizationFrame(ttk.Frame):
@@ -55,14 +57,16 @@ class VisualizationFrame(ttk.Frame):
         self.button_maximize.grid(Cts.GRID_0_2, sticky="E")
 
         # Content frames depending on the size
-        self.panel_standard_content = ConditionsStandardContent(self, self.service)
+        self.panel_standard_content = VisualizationStandardContent(self, self.service)
         self.panel_standard_content.grid(Cts.GRID_1_0)
 
-        self.panel_maximized_content = ConditionsMaxContent(self, self.service)
+        self.panel_maximized_content = VisualizationMaxContent(self, self.service)
         self.panel_maximized_content.grid(Cts.GRID_1_0)
         self.panel_maximized_content.grid_remove()
 
     def layout(self):
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
         self.columnconfigure(0, weight=1)
 
     def minimize(self):

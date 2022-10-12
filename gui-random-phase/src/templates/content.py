@@ -17,7 +17,7 @@ class Content(ttk.Frame):
 
         # Visual variables
         self.conditions_frame: ConditionsFrame = None
-        self.visualization_frame:VisualizationFrame = None
+        self.visualization_frame: VisualizationFrame = None
         self.results_frame: ResultsFrame = None
         self.status_bar = None
 
@@ -46,6 +46,7 @@ class Content(ttk.Frame):
         self.results_frame.grid(**Cts.GRID_0_2, **Cts.STICKY_ALL)
 
     def layout(self):
+        self.rowconfigure(0, weight=1)
 
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=1)
@@ -86,8 +87,6 @@ class Content(ttk.Frame):
                 self.columnconfigure(2, weight=0)
 
         elif changing_frame == Cts.VISUALIZATION_FRAME:
-            # if new_size == Cts.MINIMIZED_SIZE:
-            #     self.visualization_frame.activate_minimized_size()
             if new_size == Cts.STANDARD_SIZE:
                 self.visualization_frame.activate_standard_size()
                 self.conditions_frame.activate_standard_size()
@@ -127,7 +126,6 @@ class Content(ttk.Frame):
                     self.columnconfigure(0, weight=0)
                     self.columnconfigure(1, weight=1)
                     self.columnconfigure(2, weight=0)
-
 
             elif new_size == Cts.MAXIMIZED_SIZE:
                 self.results_frame.activate_maximized_size()

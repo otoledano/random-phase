@@ -61,6 +61,8 @@ class ResultsFrame(ttk.Frame):
         self.panel_maximized_content.grid_remove()
 
     def layout(self):
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
         self.columnconfigure(0, weight=1)
 
     def minimize(self):

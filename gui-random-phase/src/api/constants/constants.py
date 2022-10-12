@@ -24,6 +24,15 @@ class Cts:
     GRID_1_3 = {'row': 1, 'column': 3}
     GRID_1_4 = {'row': 1, 'column': 4}
 
+    # Simulation states
+    BRAND_NEW = "Brand_new"
+    CONDITIONS_OPEN = "Conditions_open"
+    CONDITIONS_CLOSED = "Conditions_closed"
+    RESULTS_IN_PROGRESS = "Results_in_progress"
+    RESULTS_FINISHED = "Results_finished"
+    VISUALIZATION_IN_PROGRESS = "Visualization_in_progress"
+    VISUALIZATION_FINISHED = "Visualization_finished"
+
     # Panel sizes
     MAXIMIZED_SIZE = "Maximized_size"
     MINIMIZED_SIZE = "Minimized_size"

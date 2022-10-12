@@ -1,0 +1,13 @@
+Posibles nombres de archivo:
+
+    SIMUNAME = nombre de la simulación
+
+    simulations/
+
+        simulation_SIMUNAME/
+            metadata_SIMUNAME.txt
+            initial_conditions_SIMUNAME/
+                initial_conditions_SIMUNAME.txt
+            results_SIMUNAME/
+
+            visualizations_SIMUNAME/
