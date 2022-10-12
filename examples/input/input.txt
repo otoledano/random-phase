@@ -4,7 +4,7 @@ Simulation_Ensemble   'NVT'		# (string) 		2 possibilities: NVT or NPT ensemble.
 Oriented_Particles	'false'		# (boolean)  		If true, the particle has orientation. 
 Potential_Tabulated	'false'		# (boolean)		If true, the potential must be supplied by in input file, if false, the potential is analytic.
 Potential_PATH		'/home/oscar/Escritorio/Anfifilicas/PES_BUENA/PES_interpolada.txt'	# (string)	Path for reading the potential file, between simple quotes ''.
-Potential_Function	'LJ'		# (string)		Possible potential interactions: 'LJ' for Lennard Jones, 'Morse' for Morse interaction, 'HD' for hard discs, 'GB' for Gay Berne elliptical potential (with oriented particles), 'AR' for algebraic repulsion, 'ARA' for algebraic repulsion and atraction.
+Potential_Function	'LJ'		# (string)		Possible potential interactions: 'LJ' for Lennard Jones, 'Morse' for Morse interaction, 'HD' for hard discs, 'GB' for Gay Berne elliptical potential (with oriented particles), 'AR' for algebraic repulsion, 'ARA' for algebraic repulsion and attraction.
 
 
 
@@ -81,7 +81,7 @@ Lattice_Elements	2.0		# (int)			Number of particles present in each unit cell of
 
 
 					# Block containing the specie index and coordinates of the different atoms that are in each unit cell
-					# The first and second columns are the "x" and "y" fractional coordinates. A third column must be suplied if the particles have orientation, describing their orientation respect to the X axis in degrees. Fractional coordinates in the range [0,1)
+					# The first and second columns are the "x" and "y" fractional coordinates. A third column must be suplied if the particles have orientation, describing their orientation respect to the X axis in degrees. Fractional coordinates in the range [0,1]
 %Begin_Lattice_Coordinates		
 0.0 0.0		
 0.5 0.5	
