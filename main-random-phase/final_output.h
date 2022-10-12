@@ -16,3 +16,4 @@
 
 
 void final_positions(Coord *coord,Simulation_Parameters sp,Files file);
+void output_sampling(Sampling_Variables *sv,Files *file,Simulation_Parameters *sp);

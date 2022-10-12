@@ -16,8 +16,13 @@
 #include "general_functions.h"
 #include "final_output.h"
 #include "potential_energy.h"
+#include "movements.h"
+#include "initialize.h"
+#include "sampling.h"
+#include "voronoi.h"
 
-
+#define trigonometric_bins 100000		// Divisions for the tabulated trigonometric variables	
+#define maxver 500						// Maximum number of particles stored in the Verlet list of each particle
 #define binrdf2 101
 
 
@@ -33,6 +38,7 @@ int main(int argc, char **argv)
 	Lattice_Basis *lattice_basis;
 	Rel_Coord rel_coord;
 	Coord *coord;
+	Sampling_Variables sv;
 	//~ double *position_x,*position_y,*alpha;
 	char *input_text;
 	int a;
@@ -57,9 +63,9 @@ int main(int argc, char **argv)
 	characters_input=i-1;							// Set the total number of characters of the input file
 	//**********************************************************************************************************************
 	
-	reading_input(&sp,&file,input_text,characters_input);		// Read the input file and fix the simulation variables values
+	reading_input(&sp,&file,input_text,characters_input,&sv);		// Read the input file and fix the simulation variables values
 	
-	//***************** CHANGE TRUE/FALSE to 0's and 1's
+	omp_set_num_threads(sp.num_processors);						// Set the number of threads for the parallelization environment
 	
 	lattice_basis=calloc(sp.lattice_elements,sizeof(Lattice_Basis));		// Allocating memory for the unit cell basis information
 	if(strcmp("true",sp.initial_lattice)==0)
@@ -69,7 +75,7 @@ int main(int argc, char **argv)
 	
 	
 	
-	create_output_files(&file,&sp);				// Create the output folder and files					
+	create_output_files(&file,&sp,&sv);				// Create the output folder and files					
 	copy_input(file,input_text,characters_input);
 	// Copy the input to the output folder
 	
@@ -93,14 +99,14 @@ int main(int argc, char **argv)
 		}		
 	}	
 	
-	coord=calloc(sp.n_part,sizeof(Coord));	
-	//~ position_x=calloc(sp.n_part,sizeof(double));		// Allocate memory for the particle's coordinates
-	//~ position_y=calloc(sp.n_part,sizeof(double));
-	//~ alpha=calloc(sp.n_part,sizeof(double));		
+	coord=calloc(sp.n_part,sizeof(Coord));					// Allocate memory for the particle's coordinates
+	for(i=0;i<sp.n_part;i++)
+	{
+		coord[i].verlet=calloc(maxver,sizeof(long int));
+	}	
 	initial_positions(&sp,lattice_basis,coord,file);		// Set the initial coordinates
 		
 	//******************************************************************************************************************************	
-		
 		
 		
 	// Define the potential interaction
@@ -109,19 +115,49 @@ int main(int argc, char **argv)
 	double (*energy)(Simulation_Parameters *sp,Rel_Coord *rel_coord)=NULL; // Set the potential energy function as stated by the input
 	potential_energy(&sp,&energy,&rel_coord,&file);
 	
-	//~ for(i=1;i<1000;i++)
-	//~ {
-		//~ printf("%lf\t%lf\n",(double)i/(double)100,(*energy)(&sp,(double)i/(double)100));
-	//~ }	
-							
+	
+	//~ printf("%lf\t%lf\n",(double)5.7/(double)100,(*energy)(&sp,(double)5.7/(double)100));	// Example for calling (*energy)
+	
 	// Initialize the sampling variables depending on the simulation variables
 	
-	// Start the simulation	
+	
+	void (*movements)(Sampling_Variables *sv,Simulation_Parameters *sp,Coord *coord,Rel_Coord *rel_coord,Files *file,double (*energy)(Simulation_Parameters *sp,Rel_Coord *rel_coord))=NULL; // Set the movement class as stated by the input
+	movement_select(&sp,&movements);
+	
+	initialize(&sp,&sv,&rel_coord,coord,energy,&file);
+
+	void (**sampling)(Sampling_Variables *sv,Simulation_Parameters *sp,Coord *coord,Rel_Coord *rel_coord,Files *file,double (*energy)(Simulation_Parameters *sp,Rel_Coord *rel_coord))=NULL;
+	sampling=calloc(sv.sampling_components,sizeof(void*));
+	sampling_selection(&sv,&sp,&sampling);
+	
+	
+	//	*******************************************			 Start the simulation	**********************************************************************
 	sp.steps_performed=0;
 	do
 	{
-		//~ MC_move();
+
+		(*movements)(&sv,&sp,coord,&rel_coord,&file,energy);
 		
+		fflush(stdout);
+		sv.num_samplings++;
+		if(sp.steps_performed>=sp.num_steps*sp.therm_ratio)
+		{
+			sv.num_therm_samplings++;
+		}
+		sv.samp_particle_prop=0;	
+		for(i=0;i<sv.sampling_components;i++)
+		{
+			(*sampling[i])(&sv,&sp,coord,&rel_coord,&file,energy);					// Put sampling as a array of pointers to functions, with the different sampling functions
+		}
+		
+		if(sv.num_samplings%sp.dynamic_output_freq==0)
+		{
+			dynamic_output(&sp,&sv,&file,coord);
+			if(sv.Voronoi_construction==1)
+			{
+				voronoi_output(&sp,&sv,&file,coord);
+			}
+		}		
 		
 	// Sampling and continue the simulation
 	
@@ -130,7 +166,7 @@ int main(int argc, char **argv)
 	while(sp.steps_performed<sp.num_steps);
 	
 	// Final outputs
-	
+	output_sampling(&sv,&file,&sp);
 	final_positions(coord,sp,file);
 	
 	return 0;

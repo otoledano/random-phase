@@ -14,9 +14,27 @@
 #include "input_variables.h"
 #include "files.h"
 
-
+#define periodic_angles 12*M_PI
 #define binrdf2 101
 #define energymap_grid 50
+#define trigonometric_bins 100000
+#define maxver 200						// Maximum number of particles stored in the Verlet list of each particle
+
+double displacement_x(Simulation_Parameters *sp,double xi,double xj)
+{
+	double dx;
+	dx=xi-xj;
+	dx=dx-sp->box_x*round((double)dx/(double)sp->box_x);
+	return dx;
+}	
+
+double displacement_y(Simulation_Parameters *sp,double yi,double yj)
+{
+	double dy;
+	dy=yi-yj;
+	dy=dy-sp->box_y*round((double)dy/(double)sp->box_y);
+	return dy;
+}	
 
 void parametros_matrix(char* palabra,char* s,int characters,FILE* entrada,int elements_x,int elements_y,double *array)
 {
@@ -146,7 +164,7 @@ void parametros_array(char* palabra,char* s,int characters,FILE* entrada,int ele
 
 
 
-void reading_input(Simulation_Parameters *sp,Files *file,char* s,long long int characters)
+void reading_input(Simulation_Parameters *sp,Files *file,char* s,long long int characters,Sampling_Variables *sv)
 {
 	char *Simulation_Ensemble={"Simulation_Ensemble"};
 	parametros_char(Simulation_Ensemble,s,characters,file->input,sp->simulation_ensemble);
@@ -249,7 +267,7 @@ void reading_input(Simulation_Parameters *sp,Files *file,char* s,long long int c
 	
 	char *Num_Steps={"Num_Steps"};
 	sp->num_steps=(long long int)parametros(Num_Steps,s,characters,file->input);
-	sp->num_steps=sp->num_steps*1E6;
+	sp->num_steps=sp->num_steps;
 	
 	char *Num_Processors={"Num_Processors"};
 	sp->num_processors=(int)parametros(Num_Processors,s,characters,file->input);
@@ -287,11 +305,11 @@ void reading_input(Simulation_Parameters *sp,Files *file,char* s,long long int c
 	
 	char *System_Units={"System_Units"};
 	parametros_char(System_Units,s,characters,file->input,sp->system_units);
-	if(strcmp("Internal",sp->potential_out)==0)			
+	if(strcmp("Internal",sp->system_units)==0)			
 	{
 		sp->k_B=1;
 	}
-	else if (strcmp("Nano",sp->potential_out)==0)
+	else if (strcmp("Nano",sp->system_units)==0)
 	{
 		sp->k_B=8.617333262E-5;
 	}	
@@ -306,6 +324,8 @@ void reading_input(Simulation_Parameters *sp,Files *file,char* s,long long int c
 	sp->rdf_precision=parametros(Rdf_Precision,s,characters,file->input);
 	char *Cutoff_Radius={"Cutoff_Radius"};
 	sp->cutoff_radius=parametros(Cutoff_Radius,s,characters,file->input);
+	char *Verlet_Radius={"Verlet_Radius"};
+	sp->verlet_radius=parametros(Verlet_Radius,s,characters,file->input);
 	char *Potential_Divis={"Potential_Divis"};
 	sp->potential_divis=parametros(Potential_Divis,s,characters,file->input);
 	
@@ -351,12 +371,77 @@ void reading_input(Simulation_Parameters *sp,Files *file,char* s,long long int c
 	}
 	
 	
-	char *N_Sampling={"N_Sampling"};
-	sp->n_sampling=(long long int)parametros(N_Sampling,s,characters,file->input);
+	char *N_Samplings={"N_Samplings"};
+	sp->n_sampling=(long long int)parametros(N_Samplings,s,characters,file->input);
 	char *Therm_Ratio={"Therm_Ratio"};
 	sp->therm_ratio=parametros(Therm_Ratio,s,characters,file->input);
 	char *Sec_Output={"Sec_Output"};
 	sp->sec_output=(long long int)parametros(Sec_Output,s,characters,file->input);
+	char *Dynamic_Output_Freq={"Dynamic_Output_Freq"};
+	sp->dynamic_output_freq=(long long int)parametros(Dynamic_Output_Freq,s,characters,file->input);
+	
+	
+	char *Rdf_Sampling={"Rdf_Sampling"};
+	parametros_char(Rdf_Sampling,s,characters,file->input,sv->rdf_sampling);
+	if(strcmp("true",sv->rdf_sampling)==0)
+	{
+		sv->Rdf_sampling=1;
+	}	
+	char *Loc_Density_Sampling={"Loc_Density_Sampling"};
+	parametros_char(Loc_Density_Sampling,s,characters,file->input,sv->loc_density_sampling);
+	if(strcmp("true",sv->loc_density_sampling)==0)
+	{
+		sv->Loc_density_sampling=1;
+		char *Loc_Density_Rad={"Loc_Density_Rad"};
+		sv->loc_density_rad=parametros(Loc_Density_Rad,s,characters,file->input);
+	}
+	
+	char *Voronoi_Construction={"Voronoi_Construction"};
+	parametros_char(Voronoi_Construction,s,characters,file->input,sv->voronoi_construction);
+	if(strcmp("true",sv->voronoi_construction)==0)
+	{
+		sv->Voronoi_construction=1;
+	}
+	
+	char *Defect_Ratio={"Defect_Ratio"};
+	parametros_char(Defect_Ratio,s,characters,file->input,sv->defect_ratio);
+	if(strcmp("true",sv->defect_ratio)==0)
+	{
+		sv->Defect_ratio=1;
+	}
+	
+	char *Coordination_Number={"Coordination_Number"};
+	sv->coordination_number=(int)parametros(Coordination_Number,s,characters,file->input);
+	
+	char *Defects_Rdf={"Defects_Rdf"};
+	parametros_char(Defects_Rdf,s,characters,file->input,sv->defects_rdf);
+	if(strcmp("true",sv->defects_rdf)==0)
+	{
+		sv->Defects_rdf=1;
+	}
+	
+	char *Orientat_Parameter={"Orientat_Parameter"};
+	parametros_char(Orientat_Parameter,s,characters,file->input,sv->orientat_parameter);
+	if(strcmp("true",sv->orientat_parameter)==0)
+	{
+		sv->Orientat_parameter=1;
+	}
+	
+	char *Energy_Profile={"Energy_Profile"};
+	parametros_char(Energy_Profile,s,characters,file->input,sv->energy_profile);
+	if(strcmp("true",sv->energy_profile)==0)
+	{
+		sv->Energy_profile=1;
+		char *Energy_Min_Hist={"Energy_Min_Hist"};
+		sv->energy_min_hist=parametros(Energy_Min_Hist,s,characters,file->input);
+		char *Energy_Max_Hist={"Energy_Max_Hist"};
+		sv->energy_max_hist=parametros(Energy_Max_Hist,s,characters,file->input);
+		char *Energy_Bins_Hist={"Energy_Bins_Hist"};
+		sv->energy_bins_hist=(long long int)parametros(Energy_Bins_Hist,s,characters,file->input);
+	}
+	
+	
+	
 	
 	
 }
@@ -485,5 +570,160 @@ void initial_positions(Simulation_Parameters *sp,Lattice_Basis *lattice_basis,Co
 			}		
 		}	
 	}
+}
+
+double cos_tab(Simulation_Parameters *sp,double argument)
+{
+	return sp->cos_tab[(long long int)floor((double)(argument*trigonometric_bins)/(double)(2*M_PI))];
+}
+
+double sin_tab(Simulation_Parameters *sp,double argument)
+{	
+	return sp->sin_tab[(long long int)floor((double)(argument*trigonometric_bins)/(double)(2.0*M_PI))];
+}
+
+double tan_tab(Simulation_Parameters *sp,double argument)
+{
+	return sp->tan_tab[(long long int)floor((double)(argument*trigonometric_bins)/(double)(2.0*M_PI))];
+}
+
+void verlet_list(Simulation_Parameters *sp,Coord *coord)
+{
+	long int i,j;
+	double dx,dy,dis2;
+	#pragma omp parallel private(j,dx,dy,dis2)
+	{
+	#pragma omp for
+	for(i=0;i<sp->n_part;i++)
+	{
+		coord[i].n_verlet=0;
+		
+		//~ for(j=0;j<maxver;j++)
+		//~ {
+			//~ particle[i].ver.list[j]=0;
+		//~ }
+		coord[i].ver_x=coord[i].x;
+		coord[i].ver_y=coord[i].y;
+
+		for(j=0;j<sp->n_part;j++)
+		{
+			
+			if(j!=i)
+			{
+				
+				dx=displacement_x(sp,coord[i].x,coord[j].x);
+				
+				if(fabs(dx)<=sp->verlet_radius)
+				{
+					dy=displacement_y(sp,coord[i].y,coord[j].y);
+					if(fabs(dy)<=sp->verlet_radius)
+					{
+						dis2=pow(dx,2)+pow(dy,2);
+						if(dis2<sp->verlet_radius_2)
+						{
+							coord[i].verlet[coord[i].n_verlet]=j;
+							coord[i].n_verlet+=1;
+						}
+					}
+				}
+			}
+		}
+					
+	}
+	}
+	
+			
+}
+
+void verlet_check(Simulation_Parameters *sp,Coord *coord,uint64_t ii)
+{
+	double deltax,deltay,delta;
+				
+	deltax=coord[ii].x-coord[ii].ver_x;
+	deltax=deltax-sp->box_x*round((double)deltax/(double)sp->box_x);
+	deltay=coord[ii].y-coord[ii].ver_y;
+	deltay=deltay-sp->box_y*round((double)deltay/(double)sp->box_y);		
+	
+	delta=deltax*deltax+deltay*deltay;
+	if(delta>sp->lim_2)
+	{
+		verlet_list(sp,coord);	
+	}	
+	
+}
+
+double energy_verlet(Rel_Coord *rel_coord,Coord *coord,Simulation_Parameters *sp,double (*energy)(Simulation_Parameters *sp,Rel_Coord *rel_coord),long long int i)
+{
+	double En,dx,dy,dis2;
+	long int j,jj;
+	En=0;
+	for(jj=0;jj<coord[i].n_verlet;jj++)
+	{
+		j=coord[i].verlet[jj];						
+		dx=displacement_x(sp,coord[i].x,coord[j].x);
+		dy=displacement_y(sp,coord[i].y,coord[j].y);
+		dis2=dx*dx+dy*dy;
+		if(dis2<sp->rcut_2)
+		{
+			rel_coord->r=sqrt(dis2);
+			En+=(energy)(sp,rel_coord);
+		}
+	}
+	
+	return En;
+}	
+
+
+void dynamic_output(Simulation_Parameters *sp,Sampling_Variables *sv,Files *file,Coord *coord)
+{
+	long long int i,j;
+	fprintf(file->dynamic,"#Step %lld\n",sp->steps_performed);
+	for(i=0;i<sp->n_part;i++)
+	{
+		fprintf(file->dynamic,"%lf\t%lf\t",coord[i].x,coord[i].y);		
+		for(j=0;j<sv->particle_properties;j++)
+		{
+			//~ fprintf(file->dynamic,"%lf\t",sv->particle_properties_values[i][j]);
+			fprintf(file->dynamic,"%lf\t",sv->particle_prop_list[j*sp->n_part+i]);
+		}	
+		fprintf(file->dynamic,"\n");
+	}
+}
+
+double periodic_boundary_conditions(double position,double amplitude)
+{
+	return position-amplitude*(floor(position/amplitude));
+}
+
+void histogram(long long int *histogram,double width,double min,long long int bins_num,double value)
+{
+	long long int bin;
+	bin=(long long int)floor((value-min)/width);
+	if(bin<bins_num)
+	{
+		histogram[bin]++;
+	}
+}	
+
+double distance(Simulation_Parameters *sp,double x1,double x2,double y1,double y2)
+{
+	double dx,dy,dis;
+	
+	dx=x1-x2;
+	dy=y1-y2;
+	dx=dx-sp->box_x*round(dx/sp->box_x);
+	dy=dy-sp->box_y*round(dy/sp->box_y);
+	dis=sqrt(pow(dx,2)+pow(dy,2));
+	return dis;
+}			
+
+void weighted_bond_orientation(Simulation_Parameters *sp,Sampling_Variables *sv,double dx,double dy,int i,double weight)
+{
+	double angle;
+	
+	angle=sv->coordination_number*(atan2(dy,dx));
+	angle=fmod(angle+periodic_angles,2*M_PI);
+	sv->orientational_param_re[i]=sv->orientational_param_re[i]+weight*cos_tab(sp,(double)(angle));
+	sv->orientational_param_im[i]=sv->orientational_param_im[i]+weight*sin_tab(sp,(double)(angle));	
 }
 
