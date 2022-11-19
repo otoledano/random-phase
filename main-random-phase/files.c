@@ -16,12 +16,24 @@
 
 void create_output_files(Files *file,Simulation_Parameters *sp,Sampling_Variables *sv)
 {
-	mkdir(file->output_path,0744);
+	#if defined(_WIN32)
+	{
+		mkdir(file->simulation_path);
+		mkdir(file->output_path);
+		mkdir(file->input_path);		
+	}
+	#else
+	{
+		mkdir(file->simulation_path,0744);
+		mkdir(file->output_path,0744);
+		mkdir(file->input_path,0744);		
+	}
+	#endif
 	
 	sprintf(file->final_positions_name,"%s/final_coordinates.txt",file->output_path);
 	file->final_positions=fopen(file->final_positions_name,"w");
 	
-	sprintf(file->input_copy_name,"%s/input.txt",file->output_path);
+	printf("\n\n%s\n\n",file->input_copy_name);
 	file->input_copy=fopen(file->input_copy_name,"w");
 	
 	sprintf(file->dynamic_name,"%s/dynamic.txt",file->output_path);

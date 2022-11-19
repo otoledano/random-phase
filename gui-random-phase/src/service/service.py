@@ -1,8 +1,7 @@
 from src.api.constants.constants import Cts
-from src.api.dto.dummy_condition import DummyConditions
-from src.api.dto.initial_conditions.initial_conditions import InitialConditions
+from src.api.models.conditions.conditions import Conditions
 from src.api.mappers.mapper import Mapper
-from src.repository.c_conexion import CConexion
+from src.repository.c_random_phase import CRandomPhase
 
 from src.repository.conditions_repository import ConditionsRepository
 from src.repository.simulation_repository import SimulationRepository
@@ -20,10 +19,10 @@ class Service:
         return self.simulation_repository.exists(simulation_name)
 
     def run_simulation(self, simulation_name: str):
-        c_conexion = CConexion(simulation_name)
-        c_conexion.run_c()
+        c_random_phase = CRandomPhase()
+        c_random_phase.run(simulation_name)
 
-    def save_initial_conditions(self, initial_conditions: InitialConditions):
+    def save_conditions(self, initial_conditions: Conditions):
         simulation_name = initial_conditions.simulation_metadata.name
         conditions_csv_text = Mapper.to_csv_text(initial_conditions)
         if self.simulation_exists(simulation_name):

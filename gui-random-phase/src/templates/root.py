@@ -1,6 +1,7 @@
 import tkinter
 
 from .content import Content
+from ..api.constants.constants import Cts
 from ..api.utils.paths import PathTo
 
 
@@ -12,8 +13,9 @@ class Root(tkinter.Tk):
         super().__init__()
 
         # Visual variables
-        self.content = None
+        self.content: Content = Content(self)
         self.menu = None
+
 
         # Non Visual variables
         self.window_width = None
@@ -39,9 +41,11 @@ class Root(tkinter.Tk):
         self.resizable(True, True)
 
         # Creates the content frame and set which is his position
-        self.content: Content = Content(self)
-        self.content.grid(column=0, row=0, sticky="nsew")
+        self.content.grid(Cts.GRID_0_0)
 
     def layout(self):
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
+
+
+

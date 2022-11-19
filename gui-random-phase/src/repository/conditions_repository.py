@@ -6,7 +6,7 @@ from src.api.utils.paths import PathTo
 class ConditionsRepository:
 
     def file_path(self, simulation_name: str):
-        return PathTo.initial_conditions_file(simulation_name)
+        return PathTo.conditions_file(simulation_name)
 
     def exists(self, simulation_name: str) -> bool:
         file_path = self.file_path(simulation_name)

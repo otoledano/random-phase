@@ -1,9 +1,9 @@
-from src.api.dto.initial_conditions.initial_conditions import InitialConditions
+from src.api.models.conditions.conditions import Conditions
 
 
 class ConditionsTemplate:
     @staticmethod
-    def fill_template(conditions: InitialConditions) -> str:
+    def fill_template(conditions: Conditions) -> str:
         return f"""#########################		Defining the Universe of the Simulation		########################################################
 
 Simulation_Ensemble   '{conditions.universe_simulation.simulation_ensemble}'		# (string) 		2 possibilities: NVT or NPT ensemble. 							

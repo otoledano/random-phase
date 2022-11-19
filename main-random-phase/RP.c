@@ -50,8 +50,12 @@ int main(int argc, char **argv)
 	input_text=calloc(1000000,sizeof(char));		// Allocating memory for the string that will store input file
 
 	file.input=fopen(argv[1],"r");					// Opening the input file, named with the first argument when running the program
-	sprintf(file.output_path,"%s",argv[2]);
 	
+	sprintf(file.output_path,"%s/simulation_%s/results_%s",argv[2],argv[3],argv[3]);
+	sprintf(file.input_path,"%s/simulation_%s/conditions_%s",argv[2],argv[3],argv[3]);
+	sprintf(file.simulation_path,"%s/simulation_%s",argv[2],argv[3]);
+	sprintf(file.input_copy_name,"%s/conditions_%s.txt",file.input_path,argv[3]);
+
 	//***********************		Storing the input file in the string input_text		**********************************
 	i=0;						
 	do
@@ -115,8 +119,6 @@ int main(int argc, char **argv)
 	double (*energy)(Simulation_Parameters *sp,Rel_Coord *rel_coord)=NULL; // Set the potential energy function as stated by the input
 	potential_energy(&sp,&energy,&rel_coord,&file);
 	
-	
-	//~ printf("%lf\t%lf\n",(double)5.7/(double)100,(*energy)(&sp,(double)5.7/(double)100));	// Example for calling (*energy)
 	
 	// Initialize the sampling variables depending on the simulation variables
 	

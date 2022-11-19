@@ -14,6 +14,8 @@ typedef struct
 	FILE *input,*initial_positions,*final_positions,*input_copy,*potential_out,*potential_in,*dynamic,*rdf_out,*energy_out,*local_density,*voronoi_diagram;
 	char defect_ratio_name[10000],defect_rdf_name[10000],orientation_parameter_name[10000],energy_histogram_name[10000];
 	FILE *defect_ratio_out,*defect_rdf_out,*orientation_parameter_out,*energy_histogram_out;
+	char simulation_path[10000],input_path[10000];
+	
 } Files;
 
 

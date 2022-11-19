@@ -1,0 +1,2 @@
+class Tooltips:
+    pass

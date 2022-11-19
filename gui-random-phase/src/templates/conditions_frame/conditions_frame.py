@@ -3,8 +3,6 @@ from tkinter import ttk
 from src.api.constants.constants import Cts
 from src.templates.conditions_frame.conditions_max_content import ConditionsMaxContent
 from src.templates.conditions_frame.conditions_standard_content import ConditionsStandardContent
-from src.templates.visualization_frame.visualization_max_content import VisualizationMaxContent
-from src.templates.visualization_frame.visualization_standard_content import VisualizationStandardContent
 
 
 class ConditionsFrame(ttk.Frame):

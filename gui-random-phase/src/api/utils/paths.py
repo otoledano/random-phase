@@ -1,6 +1,5 @@
-from os.path import dirname, abspath, curdir, join
-
 import __main__
+from os.path import dirname, abspath, join
 
 """Module to reference the path to folders and files needed by the gui"""
 
@@ -11,7 +10,7 @@ class PathTo:
     PROJECT_FOLDER: str = dirname(dirname(abspath(__main__.__file__)))
 
     # Path to  gui-random-phase folder
-    GUI_RANDOM_PHASE_FOLDER: str = dirname(abspath(curdir))
+    GUI_RANDOM_PHASE_FOLDER: str = join(PROJECT_FOLDER, "gui-random-phase")
 
     # Path to resources folder
     RESOURCES_FOLDER: str = join(GUI_RANDOM_PHASE_FOLDER, "resources")
@@ -26,7 +25,7 @@ class PathTo:
     C_RANDOM_PHASE_FOLDER: str = join(PROJECT_FOLDER, "main-random-phase")
 
     # Path to C executable
-    C_EXECUTABLE_FILE: str = join(C_RANDOM_PHASE_FOLDER, "RP.o")
+    C_EXECUTABLE_FILE: str = join(PROJECT_FOLDER, "RP.exe")
 
     # Concrete simulation paths
     @staticmethod
@@ -39,14 +38,14 @@ class PathTo:
         return join(simulation_folder, f"metadata_{simulation_name}.txt")
 
     @staticmethod
-    def initial_conditions_folder(simulation_name: str) -> str:
+    def conditions_folder(simulation_name: str) -> str:
         simulation_folder = PathTo.simulation_folder(simulation_name)
-        return join(simulation_folder, f"initial_conditions_{simulation_name}")
+        return join(simulation_folder, f"conditions_{simulation_name}")
 
     @staticmethod
-    def initial_conditions_file(simulation_name: str) -> str:
-        initial_conditions_folder = PathTo.initial_conditions_folder(simulation_name)
-        return join(initial_conditions_folder, f"initial_conditions_{simulation_name}.txt")
+    def conditions_file(simulation_name: str) -> str:
+        conditions_folder = PathTo.conditions_folder(simulation_name)
+        return join(conditions_folder, f"conditions_{simulation_name}.txt")
 
     @staticmethod
     def results_folder(simulation_name: str) -> str:
