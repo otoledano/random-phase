@@ -12,7 +12,9 @@ class CRandomPhase:
     def run(self, simulation_name):
         input_example = join(PathTo.C_RANDOM_PHASE_FOLDER, "input.txt")
         command = PathTo.C_EXECUTABLE_FILE + " " + input_example + " " + PathTo.SIMULATIONS_FOLDER + " " + simulation_name
-        subprocess.call(command, shell=True)
+        # subprocess.call(command, shell=True)
+
+        subprocess.call(command)
 
     def stop(self):
         pass
